@@ -56,6 +56,7 @@
     "transpileOnly": false,
     "swc": false,
     "esm": true,
+    "experimentalSpecifierResolution": "node",
     "compilerOptions": {
       "module": "ESNext",
       "moduleResolution": "node"
