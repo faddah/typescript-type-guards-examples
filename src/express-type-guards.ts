@@ -404,6 +404,10 @@ class UserService {
         const aValue = a[sortBy];
         const bValue = b[sortBy];
         
+        if (aValue === undefined || bValue === undefined) {
+          return 0;
+        }
+        
         let comparison = 0;
         if (aValue < bValue) comparison = -1;
         if (aValue > bValue) comparison = 1;
