@@ -6,7 +6,7 @@ import express, { Request, Response, NextFunction, RequestHandler } from 'expres
 import { 
   User, Result, AppError, APIEvent,
   isUser, isSuccess, isFailure, isAPIEvent,
-  validateUser, assertIsUser, isNonEmptyString, isPositiveNumber
+  validateUser, assertIsUser, isNonEmptyString, isPositiveNumber, isBusinessError
 } from './detailed-type-guards';
 
 // =============================================================================
