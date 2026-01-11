@@ -604,7 +604,7 @@ const userService = new UserService();
 // Type-safe controller handlers
 class UserController {
   // Create user endpoint
-  static createUser: RequestHandler = async (req: TypedRequest<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>, res, next) => {
+  static createUser: RequestHandler = async (req: TypedRequest<Omit<User, 'id' | 'createdAt' | 'updatedAt'>>, res: Response, next: NextFunction) => {
     try {
       const result = await userService.createUser(req.validatedBody || req.body);
       
@@ -619,7 +619,7 @@ class UserController {
   };
   
   // Get user by ID endpoint
-  static getUserById: RequestHandler = async (req, res, next) => {
+  static getUserById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const result = await userService.getUserById(id);
@@ -627,7 +627,7 @@ class UserController {
       if (isSuccess(result)) {
         return ResponseHelper.success(res, result.data);
       } else {
-        if (result.error.code === 'NOT_FOUND') {
+        if (isBusinessError(result.error) && result.error.code === 'NOT_FOUND') {
           return ResponseHelper.notFound(res, 'User');
         }
         return ResponseHelper.error(res, result.error);
@@ -638,15 +638,15 @@ class UserController {
   };
   
   // Get all users with pagination
-  static getUsers: RequestHandler = async (req, res, next) => {
+  static getUsers: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { page, limit, sortBy, sortOrder } = req.query as PaginationQuery;
       
       const options = {
         page: page ? parseInt(page, 10) : 1,
         limit: limit ? parseInt(limit, 10) : 10,
-        sortBy: sortBy as keyof User | undefined,
-        sortOrder: sortOrder as 'asc' | 'desc' | undefined,
+        ...(sortBy && { sortBy: sortBy as keyof User }),
+        ...(sortOrder && { sortOrder: sortOrder as 'asc' | 'desc' }),
       };
       
       const result = await userService.getUsers(options);
@@ -667,7 +667,7 @@ class UserController {
   };
   
   // Update user endpoint
-  static updateUser: RequestHandler = async (req, res, next) => {
+  static updateUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const updates = req.validatedBody || req.body;
@@ -677,7 +677,7 @@ class UserController {
       if (isSuccess(result)) {
         return ResponseHelper.success(res, result.data, { updated: true });
       } else {
-        if (result.error.code === 'NOT_FOUND') {
+        if (isBusinessError(result.error) && result.error.code === 'NOT_FOUND') {
           return ResponseHelper.notFound(res, 'User');
         }
         return ResponseHelper.error(res, result.error);
@@ -688,7 +688,7 @@ class UserController {
   };
   
   // Delete user endpoint
-  static deleteUser: RequestHandler = async (req, res, next) => {
+  static deleteUser: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const result = await userService.deleteUser(id);
@@ -696,7 +696,7 @@ class UserController {
       if (isSuccess(result)) {
         return ResponseHelper.success(res, result.data, { deleted: true });
       } else {
-        if (result.error.code === 'NOT_FOUND') {
+        if (isBusinessError(result.error) && result.error.code === 'NOT_FOUND') {
           return ResponseHelper.notFound(res, 'User');
         }
         return ResponseHelper.error(res, result.error);
@@ -707,7 +707,7 @@ class UserController {
   };
   
   // Get events endpoint
-  static getEvents: RequestHandler = async (req, res, next) => {
+  static getEvents: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { type } = req.query;
       const filter = type ? { type: type as APIEvent['type'] } : undefined;
@@ -771,7 +771,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (req: Request, res: Response) => {
   ResponseHelper.success(res, { 
     status: 'healthy', 
     timestamp: new Date(),
