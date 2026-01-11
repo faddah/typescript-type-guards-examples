@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+
+# VS Code
+.vscode/
+.vscode/*.code-workspace
+.vscode/settings.json
+.vscode/**/*
+.vscode/*
+*.code-workspace
+
+# Node
+node_modules/
+node_modules/**/*
+node_modules/*
+node_modules/**/**/*
