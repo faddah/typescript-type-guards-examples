@@ -7,7 +7,7 @@
     "start": "ts-node practical-examples.ts",
     "start:server": "ts-node ./src/express-type-guards.ts",
     "dev": "tsx watch ./src/practical-examples.ts",
-    "dev:server": "ts-node-dev --respawn ./src/express-type-guards.ts",
+    "dev:server": "tsx watch ./src/express-type-guards.ts",
     "build": "tsc",
     "test": "ts-node ./src/practical-examples.ts && echo '\n=== Testing Express Server ===' && ts-node ./src/test-server.ts",
     "lint": "eslint src/**/*.{ts,tsx}",
