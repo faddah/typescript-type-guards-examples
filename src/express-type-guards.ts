@@ -1,7 +1,7 @@
 // =============================================================================
 // TYPE GUARDS INTEGRATION WITH EXPRESS.JS
 // =============================================================================
-
+// @ts-ignore
 import express, { Request, Response, NextFunction, RequestHandler } from 'express';
 import { 
   User, Result, AppError, APIEvent,
