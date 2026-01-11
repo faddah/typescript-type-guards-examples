@@ -189,11 +189,11 @@ function isValidPhoneNumber(phone: string): boolean {
 function isAddress(value: unknown): value is Address {
   return (
     isObject(value) &&
-    'street' in value && isNonEmptyString(value.street) &&
-    'city' in value && isNonEmptyString(value.city) &&
-    'state' in value && isNonEmptyString(value.state) &&
-    'zipCode' in value && isNonEmptyString(value.zipCode) &&
-    'country' in value && isNonEmptyString(value.country)
+    'street' in value && isNonEmptyString(value['street']) &&
+    'city' in value && isNonEmptyString(value['city']) &&
+    'state' in value && isNonEmptyString(value['state']) &&
+    'zipCode' in value && isNonEmptyString(value['zipCode']) &&
+    'country' in value && isNonEmptyString(value['country'])
   );
 }
 
@@ -201,20 +201,20 @@ function isContactInfo(value: unknown): value is ContactInfo {
   if (!isObject(value)) return false;
   
   // Required email field
-  if (!('email' in value) || !isString(value.email) || !isValidEmail(value.email)) {
+  if (!('email' in value) || !isString(value['email']) || !isValidEmail(value['email'])) {
     return false;
   }
   
   // Optional phone field
   if ('phone' in value) {
-    if (!isString(value.phone) || !isValidPhoneNumber(value.phone)) {
+    if (!isString(value['phone']) || !isValidPhoneNumber(value['phone'])) {
       return false;
     }
   }
   
   // Optional address field
   if ('address' in value) {
-    if (!isAddress(value.address)) {
+    if (!isAddress(value['address'])) {
       return false;
     }
   }
@@ -226,16 +226,16 @@ function isUser(value: unknown): value is User {
   if (!isObject(value)) return false;
   
   return (
-    'id' in value && isNonEmptyString(value.id) &&
-    'name' in value && isNonEmptyString(value.name) &&
-    'contact' in value && isContactInfo(value.contact) &&
-    'age' in value && isPositiveNumber(value.age) && isInteger(value.age) &&
-    'isActive' in value && isBoolean(value.isActive) &&
-    'tags' in value && isArray<string>(value.tags) && 
-      (value.tags as unknown[]).every(isString) &&
-    'createdAt' in value && isDate(value.createdAt) &&
-    'updatedAt' in value && isDate(value.updatedAt) &&
-    (!('metadata' in value) || isPlainObject(value.metadata))
+    'id' in value && isNonEmptyString(value['id']) &&
+    'name' in value && isNonEmptyString(value['name']) &&
+    'contact' in value && isContactInfo(value['contact']) &&
+    'age' in value && isPositiveNumber(value['age']) && isInteger(value['age']) &&
+    'isActive' in value && isBoolean(value['isActive']) &&
+    'tags' in value && isArray<string>(value['tags']) && 
+      (value['tags'] as unknown[]).every(isString) &&
+    'createdAt' in value && isDate(value['createdAt']) &&
+    'updatedAt' in value && isDate(value['updatedAt']) &&
+    (!('metadata' in value) || isPlainObject(value['metadata']))
   );
 }
 
@@ -286,43 +286,43 @@ function validateUser(value: unknown): ValidationResult<User> {
   }
   
   // Validate each field with detailed error messages
-  if (!('id' in value) || !isNonEmptyString(value.id)) {
-    errors.push({ field: 'id', message: 'Missing or invalid id field', value: 'id' in value ? value.id : undefined });
+  if (!('id' in value) || !isNonEmptyString(value['id'])) {
+    errors.push({ field: 'id', message: 'Missing or invalid id field', value: 'id' in value ? value['id'] : undefined });
   }
   
-  if (!('name' in value) || !isNonEmptyString(value.name)) {
-    errors.push({ field: 'name', message: 'Missing or invalid name field', value: 'name' in value ? value.name : undefined });
+  if (!('name' in value) || !isNonEmptyString(value['name'])) {
+    errors.push({ field: 'name', message: 'Missing or invalid name field', value: 'name' in value ? value['name'] : undefined });
   }
   
-  if (!('contact' in value) || !isContactInfo(value.contact)) {
-    errors.push({ field: 'contact', message: 'Missing or invalid contact field', value: 'contact' in value ? value.contact : undefined });
+  if (!('contact' in value) || !isContactInfo(value['contact'])) {
+    errors.push({ field: 'contact', message: 'Missing or invalid contact field', value: 'contact' in value ? value['contact'] : undefined });
   }
   
-  if (!('age' in value) || !isPositiveNumber(value.age) || !isInteger(value.age)) {
-    errors.push({ field: 'age', message: 'Age must be a positive integer', value: 'age' in value ? value.age : undefined });
+  if (!('age' in value) || !isPositiveNumber(value['age']) || !isInteger(value['age'])) {
+    errors.push({ field: 'age', message: 'Age must be a positive integer', value: 'age' in value ? value['age'] : undefined });
   }
   
-  if (!('isActive' in value) || !isBoolean(value.isActive)) {
-    errors.push({ field: 'isActive', message: 'isActive must be a boolean', value: 'isActive' in value ? value.isActive : undefined });
+  if (!('isActive' in value) || !isBoolean(value['isActive'])) {
+    errors.push({ field: 'isActive', message: 'isActive must be a boolean', value: 'isActive' in value ? value['isActive'] : undefined });
   }
   
-  if (!('tags' in value) || !isArray<string>(value.tags) || 
-      !(value.tags as unknown[]).every(isString)) {
-    errors.push({ field: 'tags', message: 'tags must be an array of strings', value: 'tags' in value ? value.tags : undefined });
+  if (!('tags' in value) || !isArray<string>(value['tags']) || 
+      !(value['tags'] as unknown[]).every(isString)) {
+    errors.push({ field: 'tags', message: 'tags must be an array of strings', value: 'tags' in value ? value['tags'] : undefined });
   }
   
-  if (!('createdAt' in value) || !isDate(value.createdAt)) {
-    errors.push({ field: 'createdAt', message: 'createdAt must be a valid Date', value: 'createdAt' in value ? value.createdAt : undefined });
+  if (!('createdAt' in value) || !isDate(value['createdAt'])) {
+    errors.push({ field: 'createdAt', message: 'createdAt must be a valid Date', value: 'createdAt' in value ? value['createdAt'] : undefined });
   }
   
-  if (!('updatedAt' in value) || !isDate(value.updatedAt)) {
-    errors.push({ field: 'updatedAt', message: 'updatedAt must be a valid Date', value: 'updatedAt' in value ? value.updatedAt : undefined });
+  if (!('updatedAt' in value) || !isDate(value['updatedAt'])) {
+    errors.push({ field: 'updatedAt', message: 'updatedAt must be a valid Date', value: 'updatedAt' in value ? value['updatedAt'] : undefined });
   }
   
   if (errors.length === 0) {
     return {
       isValid: true,
-      data: value as User,
+      data: value as unknown as User,
       errors: []
     };
   }
@@ -398,45 +398,45 @@ function isUserLoginEvent(event: APIEvent): event is Extract<APIEvent, { type: '
 function isAPIEvent(value: unknown): value is APIEvent {
   if (!isObject(value)) return false;
   
-  if (!('type' in value) || !isString(value.type)) return false;
-  if (!('timestamp' in value) || !isDate(value.timestamp)) return false;
-  if (!('data' in value) || !isObject(value.data)) return false;
+  if (!('type' in value) || !isString(value['type'])) return false;
+  if (!('timestamp' in value) || !isDate(value['timestamp'])) return false;
+  if (!('data' in value) || !isObject(value['data'])) return false;
   
-  const eventType = value.type;
-  const data = value.data;
+  const eventType = value['type'];
+  const data = value['data'];
   
   switch (eventType) {
     case 'user_created':
       return (
-        'user' in data && isUser(data.user) &&
-        'source' in data && isString(data.source) &&
-        ['registration', 'admin', 'import'].includes(data.source) &&
-        (!('metadata' in data) || isPlainObject(data.metadata))
+        'user' in data && isUser(data['user']) &&
+        'source' in data && isString(data['source']) &&
+        ['registration', 'admin', 'import'].includes(data['source']) &&
+        (!('metadata' in data) || isPlainObject(data['metadata']))
       );
       
     case 'user_updated':
       return (
-        'userId' in data && isNonEmptyString(data.userId) &&
-        'changes' in data && isObject(data.changes) &&
-        'previousValues' in data && isObject(data.previousValues) &&
-        'updatedBy' in data && isNonEmptyString(data.updatedBy)
+        'userId' in data && isNonEmptyString(data['userId']) &&
+        'changes' in data && isObject(data['changes']) &&
+        'previousValues' in data && isObject(data['previousValues']) &&
+        'updatedBy' in data && isNonEmptyString(data['updatedBy'])
       );
       
     case 'user_deleted':
       return (
-        'userId' in data && isNonEmptyString(data.userId) &&
-        'deletedBy' in data && isNonEmptyString(data.deletedBy) &&
-        'backup' in data && isUser(data.backup) &&
-        (!('reason' in data) || isString(data.reason))
+        'userId' in data && isNonEmptyString(data['userId']) &&
+        'deletedBy' in data && isNonEmptyString(data['deletedBy']) &&
+        'backup' in data && isUser(data['backup']) &&
+        (!('reason' in data) || isString(data['reason']))
       );
       
     case 'user_login':
       return (
-        'userId' in data && isNonEmptyString(data.userId) &&
-        'ip' in data && isNonEmptyString(data.ip) &&
-        'userAgent' in data && isNonEmptyString(data.userAgent) &&
-        'successful' in data && isBoolean(data.successful) &&
-        (!('failureReason' in data) || isString(data.failureReason))
+        'userId' in data && isNonEmptyString(data['userId']) &&
+        'ip' in data && isNonEmptyString(data['ip']) &&
+        'userAgent' in data && isNonEmptyString(data['userAgent']) &&
+        'successful' in data && isBoolean(data['successful']) &&
+        (!('failureReason' in data) || isString(data['failureReason']))
       );
       
     default:
@@ -485,7 +485,7 @@ type Result<T, E = Error> =
   | { success: false; error: E; context?: Record<string, any> };
 
 // Specific error types
-interface ValidationError {
+interface AppValidationError {
   type: 'validation';
   field: string;
   message: string;
@@ -506,7 +506,7 @@ interface BusinessError {
   details?: Record<string, any>;
 }
 
-type AppError = ValidationError | NetworkError | BusinessError;
+type AppError = AppValidationError | NetworkError | BusinessError;
 
 // Result type guards
 function isSuccess<T, E>(result: Result<T, E>): result is Extract<Result<T, E>, { success: true }> {
@@ -518,7 +518,7 @@ function isFailure<T, E>(result: Result<T, E>): result is Extract<Result<T, E>, 
 }
 
 // Error type guards
-function isValidationError(error: AppError): error is ValidationError {
+function isValidationError(error: AppError): error is AppValidationError {
   return error.type === 'validation';
 }
 
@@ -728,8 +728,8 @@ function assertHasTypedProperty<T extends object, K extends PropertyKey, V>(
   fieldName = 'object'
 ): asserts obj is T & Record<K, V> {
   assertHasProperty(obj, key, fieldName);
-  if (!guard(obj[key as keyof T])) {
-    throw new ValidationError(`${fieldName}.${String(key)}`, obj[key as keyof T], 'valid property value');
+  if (!guard((obj as any)[key])) {
+    throw new ValidationError(`${fieldName}.${String(key)}`, (obj as any)[key], 'valid property value');
   }
 }
 
