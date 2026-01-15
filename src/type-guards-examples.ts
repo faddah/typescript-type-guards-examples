@@ -66,10 +66,10 @@ function isUser(value: unknown): value is User {
     'name' in value &&
     'email' in value &&
     'age' in value &&
-    typeof value.id === 'string' &&
-    typeof value.name === 'string' &&
-    typeof value.email === 'string' &&
-    typeof value.age === 'number'
+    typeof value['id'] === 'string' &&
+    typeof value['name'] === 'string' &&
+    typeof value['email'] === 'string' &&
+    typeof value['age'] === 'number'
   );
 }
 
@@ -79,9 +79,9 @@ function isAdmin(value: unknown): value is Admin {
     isUser(value) &&
     'role' in value &&
     'permissions' in value &&
-    value.role === 'admin' &&
-    Array.isArray(value.permissions) &&
-    value.permissions.every(p => typeof p === 'string')
+    value['role'] === 'admin' &&
+    Array.isArray(value['permissions']) &&
+    value['permissions'].every(p => typeof p === 'string')
   );
 }
 
