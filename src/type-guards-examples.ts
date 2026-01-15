@@ -350,7 +350,7 @@ function canBark(animal: unknown): animal is { bark(): string } {
     typeof animal === 'object' &&
     animal !== null &&
     'bark' in animal &&
-    typeof (animal as Record<string, unknown>).bark === 'function'
+    typeof (animal as Record<string, unknown>)['bark'] === 'function'
   );
 }
 
@@ -371,7 +371,7 @@ function isPromise<T>(value: unknown): value is Promise<T> {
     typeof value === 'object' &&
     value !== null &&
     'then' in value &&
-    typeof (value as Record<string, unknown>).then === 'function'
+    typeof (value as Record<string, unknown>)['then'] === 'function'
   );
 }
 
@@ -404,17 +404,17 @@ function isApiResponse<T>(
   // Check required fields
   if (!('status' in value) || !('timestamp' in value)) return false;
   
-  const status = value.status;
-  const timestamp = value.timestamp;
+  const status = value['status'];
+  const timestamp = value['timestamp'];
   
   if (status !== 'success' && status !== 'error') return false;
   if (typeof timestamp !== 'number') return false;
   
   // Check optional fields based on status
   if (status === 'success') {
-    return 'data' in value && dataGuard(value.data);
+    return 'data' in value && dataGuard(value['data']);
   } else {
-    return 'error' in value && typeof value.error === 'string';
+    return 'error' in value && typeof value['error'] === 'string';
   }
 }
 
